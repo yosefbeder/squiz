@@ -1,0 +1,172 @@
+.btn {
+  outline: none;
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem 2rem;
+  border-radius: 1rem;
+  background-color: transparent;
+  color: $color-primary;
+  border: 0.2rem solid $color-primary;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    color: var(--color-white);
+    background-color: $color-primary;
+  }
+}
+
+.person {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: monospace;
+
+  &__rank {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '#';
+      font-size: 6rem;
+      position: absolute;
+      top: -1.5rem;
+      left: -0.5rem;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 0;
+      height: 100%;
+      clip-path: polygon(40% 0, 0 100%, 100% 100%, 100% 0);
+      transition: all 0.3s cubic-bezier(1, 0.43, 0.83, 1.24);
+    }
+
+    &:hover::after {
+      width: 40%;
+    }
+
+    &--1 {
+      color: darken($color-gold, 15%);
+      background-color: $color-gold;
+
+      &::before {
+        color: lighten($color-gold, 20%);
+      }
+
+      &::after {
+        background-color: lighten($color-gold, 20%);
+      }
+    }
+
+    &--2 {
+      color: darken($color-silver, 15%);
+      background-color: $color-silver;
+
+      &::before {
+        color: lighten($color-silver, 20%);
+      }
+
+      &::after {
+        background-color: lighten($color-silver, 20%);
+      }
+    }
+
+    &--3 {
+      color: darken($color-bronze, 15%);
+      background-color: $color-bronze;
+
+      &::before {
+        color: lighten($color-bronze, 20%);
+      }
+
+      &::after {
+        background-color: lighten($color-bronze, 20%);
+      }
+    }
+
+    &--solid {
+      color: darken($color-grey, 15%);
+      background-color: $color-grey;
+
+      &::before {
+        color: lighten($color-grey, 20%);
+      }
+
+      &::after {
+        background-color: lighten($color-grey, 20%);
+      }
+    }
+  }
+
+  &__desc {
+    flex: 1 1;
+    display: flex;
+    gap: 0.5rem;
+    padding-left: 0.5rem;
+    background-color: $color-primary;
+    border-radius: 1rem;
+    overflow: hidden;
+    cursor: move;
+
+    &.dragging {
+      opacity: 0.5;
+      border: 0.2rem dashed $color-grey;
+    }
+  }
+  &__desc.true {
+    background-color: $color-green;
+  }
+
+  &__desc.false {
+    background-color: $color-red;
+  }
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: $color-secondary;
+    padding: 0.5rem;
+    pointer-events: none;
+
+    &:first-child {
+      flex: 2;
+    }
+  }
+
+  &__desc.draggingover &__info {
+    background-color: darken($color-secondary, 15%);
+    border: 0.2rem solid $color-grey;
+  }
+
+  &__header {
+    font-size: 2rem;
+    font-weight: 300;
+  }
+
+  &__text {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+
+  &__img {
+    width: 6rem;
+    height: 6rem;
+    object-fit: cover;
+    border: 0.3rem solid $color-primary;
+    border-radius: 50%;
+    padding: 0.3rem;
+  }
+}

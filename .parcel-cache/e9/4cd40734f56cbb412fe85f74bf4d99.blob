@@ -1,0 +1,30 @@
+// Importing stuff
+
+// Dom Elements
+const personDesc = document.querySelectorAll('.person__desc');
+const btnCheck = document.querySelector('.btn--check');
+const btnReSort = document.querySelector('.btn--resort');
+
+// Dragging Elements
+personDesc.forEach(desc => {
+  desc.addEventListener('dragstart', function (e) {
+    desc.classList.add('dragging');
+  });
+  desc.addEventListener('dragend', function (e) {
+    desc.classList.remove('dragging');
+  });
+});
+
+// App class
+class App {
+  constructor() {
+    this.getData();
+  }
+
+  async getData() {
+    const forbes = await require('forbes-list');
+    console.log(forbes);
+  }
+}
+
+const app = new App();
