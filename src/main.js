@@ -1,7 +1,3 @@
-// Importing stuff
-
-const forbesList = require('forbes-list');
-
 // Dom Elements
 const container = document.querySelector('.app__container');
 const btnCheck = document.querySelector('.btn--check');
@@ -17,63 +13,28 @@ class App {
   }
 
   async init() {
-    this.data = await this.getData();
-    this.curData = this.getRandomSort(this.data);
-    this.displayArr(this.curData);
-  }
-
-  async getData() {
-    const forbes = await require('forbes-list');
-    const forbesList = await forbes.list({ limit: 10 });
-    return forbesList;
-  }
-
-  getRandomSort(arr) {
-    return [...arr].sort(() => 0.5 - Math.random());
+    const getData = async function () {
+      const forbes = await require('forbes-list');
+      const forbesList = await forbes.list({ limit: 10 });
+      return forbesList;
+    };
+    this.data = await getData();
+    this.resort();
   }
 
   displayArr(arr) {
-    // clearing container
-    container.innerHTML = '';
-
-    //displaying elements
-    arr.forEach((data, i) => {
-      this.displayEl(data, i + 1);
-    });
-
-    // Adding dragging event
-    personDesc = document.querySelectorAll('.person__desc');
-    personDesc.forEach((desc, i) => {
-      desc.addEventListener('dragstart', function (e) {
-        desc.classList.add('dragging');
-        console.log(e);
-        e.dataTransfer.setData('text/plain', i + '');
-      });
-      desc.addEventListener('dragend', () => {
-        desc.classList.remove('dragging');
-      });
-      desc.addEventListener('dragover', e => {
-        e.preventDefault();
-        desc.classList.add('draggingover');
-      });
-      desc.addEventListener('dragleave', () => {
-        desc.classList.remove('draggingover');
-      });
-      desc.addEventListener('drop', e => {
-        e.preventDefault();
-        desc.classList.remove('draggingover');
-        const dragStartingIndex = e.dataTransfer.getData('text/plain');
-        this.replace(this.curData, i, dragStartingIndex);
-        this.displayArr(this.curData);
-      });
-    });
-  }
-
-  displayEl(data, id) {
-    const { personName: name, state, birthDate, thumbnail: imgPath } = data;
-    const age = (() =>
-      new Date().getFullYear() - new Date(birthDate).getFullYear())();
-    const html = `
+    // functions
+    const replace = function (arr, i1, i2) {
+      const firstEl = arr[i1];
+      const secondEl = arr[i2];
+      arr[i2] = firstEl;
+      arr[i1] = secondEl;
+    };
+    const displayEl = function (data, id) {
+      const { personName: name, state, birthDate, thumbnail: imgPath } = data;
+      const age = (() =>
+        new Date().getFullYear() - new Date(birthDate).getFullYear())();
+      const html = `
           <div class="person">
             <div class="person__rank person__rank--${
               id <= 3 ? id : 'solid'
@@ -101,14 +62,42 @@ class App {
           </div>
     `;
 
-    container.insertAdjacentHTML('beforeend', html);
-  }
+      container.insertAdjacentHTML('beforeend', html);
+    };
+    // clearing container
+    container.innerHTML = '';
 
-  replace(arr, i1, i2) {
-    const firstEl = arr[i1];
-    const secondEl = arr[i2];
-    arr[i2] = firstEl;
-    arr[i1] = secondEl;
+    //displaying elements
+    arr.forEach((data, i) => {
+      displayEl(data, i + 1);
+    });
+
+    // Adding dragging event
+    personDesc = document.querySelectorAll('.person__desc');
+    personDesc.forEach((desc, i) => {
+      desc.addEventListener('dragstart', function (e) {
+        desc.classList.add('dragging');
+        console.log(e);
+        e.dataTransfer.setData('text/plain', i + '');
+      });
+      desc.addEventListener('dragend', () => {
+        desc.classList.remove('dragging');
+      });
+      desc.addEventListener('dragover', e => {
+        e.preventDefault();
+        desc.classList.add('draggingover');
+      });
+      desc.addEventListener('dragleave', () => {
+        desc.classList.remove('draggingover');
+      });
+      desc.addEventListener('drop', e => {
+        e.preventDefault();
+        desc.classList.remove('draggingover');
+        const dragStartingIndex = e.dataTransfer.getData('text/plain');
+        replace(this.curData, i, dragStartingIndex);
+        this.displayArr(this.curData);
+      });
+    });
   }
 
   check() {
@@ -128,7 +117,10 @@ class App {
   }
 
   resort() {
-    this.curData = this.getRandomSort(this.data);
+    const getRandomSort = function (arr) {
+      return [...arr].sort(() => 0.5 - Math.random());
+    };
+    this.curData = getRandomSort(this.data);
     this.displayArr(this.curData);
   }
 }
